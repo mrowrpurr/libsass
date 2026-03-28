@@ -85,6 +85,9 @@ sass-spec/
 
 installer/
 
+# xmake
+.xmake/
+
 # Visual Studio cache directory
 .vs/
 

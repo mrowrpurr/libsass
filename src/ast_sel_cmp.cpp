@@ -164,7 +164,7 @@ namespace Sass {
     // Must have exactly one item
     if (length() != 1) return false;
     // Compare simple selectors
-    return *get(0) == rhs;
+    return get(0)->operator==(rhs);
   }
 
   /*#########################################################################*/
@@ -283,7 +283,7 @@ namespace Sass {
     // Must have exactly one item
     if (rhs.length() != 1) return false;
     // Compare compound selector
-    return *this == *rhs.get(0);
+    return this->operator==(*rhs.get(0));
   }
 
   bool SimpleSelector::operator== (const CompoundSelector& rhs) const
