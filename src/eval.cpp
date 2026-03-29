@@ -628,8 +628,8 @@ namespace Sass {
         Color_RGBA_Obj r_c = r_col->toRGBA();
         try {
           switch (op_type) {
-            case Sass_OP::EQ: return *l_n == *r_c ? bool_true : bool_false;
-            case Sass_OP::NEQ: return *l_n == *r_c ? bool_false : bool_true;
+            case Sass_OP::EQ: return l_n->operator==(*r_c) ? bool_true : bool_false;
+            case Sass_OP::NEQ: return l_n->operator==(*r_c) ? bool_false : bool_true;
             case Sass_OP::ADD: case Sass_OP::SUB: case Sass_OP::MUL: case Sass_OP::DIV: case Sass_OP::MOD:
               return Operators::op_number_color(op_type, *l_n, *r_c, options(), b_in->pstate());
             default: break;
@@ -670,8 +670,8 @@ namespace Sass {
       else if (Number* r_n = Cast<Number>(rhs)) {
         try {
           switch (op_type) {
-            case Sass_OP::EQ: return *l_c == *r_n ? bool_true : bool_false;
-            case Sass_OP::NEQ: return *l_c == *r_n ? bool_false : bool_true;
+            case Sass_OP::EQ: return l_c->operator==(*r_n) ? bool_true : bool_false;
+            case Sass_OP::NEQ: return l_c->operator==(*r_n) ? bool_false : bool_true;
             case Sass_OP::ADD: case Sass_OP::SUB: case Sass_OP::MUL: case Sass_OP::DIV: case Sass_OP::MOD:
               return Operators::op_color_number(op_type, *l_c, *r_n, options(), b_in->pstate());
             default: break;
