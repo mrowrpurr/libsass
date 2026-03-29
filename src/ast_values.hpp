@@ -221,6 +221,7 @@ namespace Sass {
 
     size_t hash() const override;
 
+    using Value::operator!=;
     bool operator< (const Number& rhs) const;
     bool operator== (const Number& rhs) const;
     bool operator< (const Expression& rhs) const override;
