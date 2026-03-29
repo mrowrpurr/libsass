@@ -69,6 +69,7 @@ namespace Sass {
     virtual size_t size() const;
     virtual void set_delayed(bool delayed) override;
 
+    using Value::operator!=;
     virtual bool operator< (const Expression& rhs) const override;
     virtual bool operator== (const Expression& rhs) const override;
 

@@ -14,8 +14,8 @@ namespace Sass {
   // Selector lists can be compared to comma lists
   bool SelectorList::operator== (const Expression& rhs) const
   {
-    if (auto l = Cast<List>(&rhs)) { return *this == *l; }
-    if (auto s = Cast<Selector>(&rhs)) { return *this == *s; }
+    if (auto l = Cast<List>(&rhs)) { return this->operator==(*l); }
+    if (auto s = Cast<Selector>(&rhs)) { return this->operator==(*s); }
     if (Cast<String>(&rhs) || Cast<Null>(&rhs)) { return false; }
     throw std::runtime_error("invalid selector base classes to compare");
   }
@@ -23,44 +23,44 @@ namespace Sass {
   // Selector lists can be compared to comma lists
   bool SelectorList::operator== (const Selector& rhs) const
   {
-    if (auto sel = Cast<SelectorList>(&rhs)) { return *this == *sel; }
-    if (auto sel = Cast<ComplexSelector>(&rhs)) { return *this == *sel; }
-    if (auto sel = Cast<CompoundSelector>(&rhs)) { return *this == *sel; }
-    if (auto sel = Cast<SimpleSelector>(&rhs)) { return *this == *sel; }
-    if (auto list = Cast<List>(&rhs)) { return *this == *list; }
+    if (auto sel = Cast<SelectorList>(&rhs)) { return this->operator==(*sel); }
+    if (auto sel = Cast<ComplexSelector>(&rhs)) { return this->operator==(*sel); }
+    if (auto sel = Cast<CompoundSelector>(&rhs)) { return this->operator==(*sel); }
+    if (auto sel = Cast<SimpleSelector>(&rhs)) { return this->operator==(*sel); }
+    if (auto list = Cast<List>(&rhs)) { return this->operator==(*list); }
     throw std::runtime_error("invalid selector base classes to compare");
   }
 
   bool ComplexSelector::operator== (const Selector& rhs) const
   {
-    if (auto sel = Cast<SelectorList>(&rhs)) { return *this == *sel; }
-    if (auto sel = Cast<ComplexSelector>(&rhs)) { return *sel == *this; }
-    if (auto sel = Cast<CompoundSelector>(&rhs)) { return *this == *sel; }
-    if (auto sel = Cast<SimpleSelector>(&rhs)) { return *this == *sel; }
+    if (auto sel = Cast<SelectorList>(&rhs)) { return this->operator==(*sel); }
+    if (auto sel = Cast<ComplexSelector>(&rhs)) { return sel->operator==(*this); }
+    if (auto sel = Cast<CompoundSelector>(&rhs)) { return this->operator==(*sel); }
+    if (auto sel = Cast<SimpleSelector>(&rhs)) { return this->operator==(*sel); }
     throw std::runtime_error("invalid selector base classes to compare");
   }
 
   bool SelectorCombinator::operator== (const Selector& rhs) const
   {
-    if (auto cpx = Cast<SelectorCombinator>(&rhs)) { return *this == *cpx; }
+    if (auto cpx = Cast<SelectorCombinator>(&rhs)) { return this->operator==(*cpx); }
     return false;
   }
 
   bool CompoundSelector::operator== (const Selector& rhs) const
   {
-    if (auto sel = Cast<SimpleSelector>(&rhs)) { return *this == *sel; }
-    if (auto sel = Cast<SelectorList>(&rhs)) { return *this == *sel; }
-    if (auto sel = Cast<ComplexSelector>(&rhs)) { return *this == *sel; }
-    if (auto sel = Cast<CompoundSelector>(&rhs)) { return *this == *sel; }
+    if (auto sel = Cast<SimpleSelector>(&rhs)) { return this->operator==(*sel); }
+    if (auto sel = Cast<SelectorList>(&rhs)) { return this->operator==(*sel); }
+    if (auto sel = Cast<ComplexSelector>(&rhs)) { return this->operator==(*sel); }
+    if (auto sel = Cast<CompoundSelector>(&rhs)) { return this->operator==(*sel); }
     throw std::runtime_error("invalid selector base classes to compare");
   }
 
   bool SimpleSelector::operator== (const Selector& rhs) const
   {
-    if (auto sel = Cast<SelectorList>(&rhs)) { return *this == *sel; }
-    if (auto sel = Cast<ComplexSelector>(&rhs)) { return *this == *sel; }
-    if (auto sel = Cast<CompoundSelector>(&rhs)) { return *this == *sel; }
-    if (auto sel = Cast<SimpleSelector>(&rhs)) return *this == *sel;
+    if (auto sel = Cast<SelectorList>(&rhs)) { return this->operator==(*sel); }
+    if (auto sel = Cast<ComplexSelector>(&rhs)) { return this->operator==(*sel); }
+    if (auto sel = Cast<CompoundSelector>(&rhs)) { return this->operator==(*sel); }
+    if (auto sel = Cast<SimpleSelector>(&rhs)) return this->operator==(*sel);
     throw std::runtime_error("invalid selector base classes to compare");
   }
 
@@ -95,7 +95,7 @@ namespace Sass {
     // Must have exactly one item
     if (length() != 1) return false;
     // Compare simple selectors
-    return *get(0) == rhs;
+    return get(0)->operator==(rhs);
   }
 
   bool SelectorList::operator== (const CompoundSelector& rhs) const
@@ -105,7 +105,7 @@ namespace Sass {
     // Must have exactly one item
     if (length() != 1) return false;
     // Compare simple selectors
-    return *get(0) == rhs;
+    return get(0)->operator==(rhs);
   }
 
   bool SelectorList::operator== (const SimpleSelector& rhs) const
@@ -115,7 +115,7 @@ namespace Sass {
     // Must have exactly one item
     if (length() != 1) return false;
     // Compare simple selectors
-    return *get(0) == rhs;
+    return get(0)->operator==(rhs);
   }
 
   /*#########################################################################*/
@@ -128,7 +128,7 @@ namespace Sass {
     size_t rlen = rhs.length();
     if (len != rlen) return false;
     for (size_t i = 0; i < len; i += 1) {
-      if (*get(i) != *rhs.get(i)) return false;
+      if (!(get(i)->operator==(*rhs.get(i)))) return false;
     }
     return true;
   }
@@ -144,7 +144,7 @@ namespace Sass {
     // Must have exactly one item
     if (rhs.length() != 1) return false;
     // Compare complex selector
-    return *this == *rhs.get(0);
+    return this->operator==(*rhs.get(0));
   }
 
   bool ComplexSelector::operator== (const CompoundSelector& rhs) const
@@ -154,7 +154,7 @@ namespace Sass {
     // Must have exactly one item
     if (length() != 1) return false;
     // Compare compound selector
-    return *get(0) == rhs;
+    return get(0)->operator==(rhs);
   }
 
   bool ComplexSelector::operator== (const SimpleSelector& rhs) const
@@ -231,7 +231,7 @@ namespace Sass {
     // Must have exactly one item
     if (rhs.length() != 1) return false;
     // Compare complex selector
-    return *this == *rhs.get(0);
+    return this->operator==(*rhs.get(0));
   }
 
   bool CompoundSelector::operator== (const ComplexSelector& rhs) const
@@ -241,7 +241,7 @@ namespace Sass {
     // Must have exactly one item
     if (rhs.length() != 1) return false;
     // Compare compound selector
-    return *this == *rhs.get(0);
+    return this->operator==(*rhs.get(0));
   }
 
   bool CompoundSelector::operator== (const SimpleSelector& rhs) const
@@ -273,7 +273,7 @@ namespace Sass {
     // Must have exactly one item
     if (rhs.length() != 1) return false;
     // Compare complex selector
-    return *this == *rhs.get(0);
+    return this->operator==(*rhs.get(0));
   }
 
   bool SimpleSelector::operator== (const ComplexSelector& rhs) const
@@ -293,7 +293,7 @@ namespace Sass {
     // Must have exactly one item
     if (rhs.length() != 1) return false;
     // Compare simple selector
-    return *this == *rhs.get(0);
+    return this->operator==(*rhs.get(0));
   }
 
   /*#########################################################################*/

@@ -302,6 +302,7 @@ namespace Sass {
     size_t maxSpecificity() const override;
     size_t minSpecificity() const override;
 
+    using Selector::operator!=;
     bool operator==(const Selector& rhs) const override;
     bool operator==(const SelectorList& rhs) const;
     bool operator==(const CompoundSelector& rhs) const;
@@ -445,6 +446,7 @@ namespace Sass {
     size_t maxSpecificity() const override;
     size_t minSpecificity() const override;
 
+    using SelectorComponent::operator!=;
     bool operator==(const Selector& rhs) const override;
 
     bool operator==(const SelectorComponent& rhs) const override;
@@ -491,6 +493,7 @@ namespace Sass {
     size_t maxSpecificity() const override;
     size_t minSpecificity() const override;
 
+    using Selector::operator!=;
     bool operator==(const Selector& rhs) const override;
     bool operator==(const ComplexSelector& rhs) const;
     bool operator==(const CompoundSelector& rhs) const;
